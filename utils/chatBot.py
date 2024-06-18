@@ -12,7 +12,7 @@ from langchain_openai.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 # from langchain_community.llms import CTransformers
-# from langchain_community.llms import HuggingFaceHub
+from langchain_community.llms import HuggingFaceHub
 # from langchain_community.llms import Ollama
 # from langchain_community.embeddings import OllamaEmbeddings
 
@@ -21,7 +21,7 @@ load_dotenv()  # Isso carrega as variáveis de ambiente do arquivo .env
 def deletar_vectorstore(caminho_pasta):
     try:
         shutil.rmtree(caminho_pasta)
-        print("Pasta deletada com sucesso!")
+        # print("Pasta deletada com sucesso!")
     except FileNotFoundError:
         print(f"Erro: A pasta '{caminho_pasta}' não foi encontrada.")
 
@@ -30,7 +30,7 @@ def create_vectorstore(chunks):
     try:
         vectorstore = FAISS.load_local('vectorstore', embeddings, allow_dangerous_deserialization=True)
         # print('------- Carregou a VECTORSTORE original ', vectorstore)
-        new_vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
+        new_vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings) # erro aqui
         # print('--------------- Nova Vectorstore!@!!!!! ', new_vectorstore)
         new_vectorstore.save_local("vectorstore_2")
         new_vectorstore = FAISS.load_local("vectorstore_2", embeddings, allow_dangerous_deserialization=True)
@@ -40,8 +40,8 @@ def create_vectorstore(chunks):
         # print('--------------- Vectorstore MERGEADA ', vectorstore)
         deletar_vectorstore("vectorstore_2")
     except:
-        print("------- rodou except")
-        vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
+        # print("------- rodou except")
+        vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings) # e aqui
         vectorstore.save_local("vectorstore")
         vectorstore = FAISS.load_local('vectorstore', embeddings, allow_dangerous_deserialization=True)
 
